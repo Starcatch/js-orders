@@ -1,51 +1,39 @@
-class ItemsController < ApplicationController
-  before_action :set_item, only: [:show, :update, :destroy]
+class Api::ItemsController < ApplicationController
+ 
 
-  # GET /items
+ 
   def index
     @items = Item.all
 
-    render json: @items
+    render json: @items, status: 200
   end
 
-  # GET /items/1
+  
   def show
-    render json: @item
+    @item = Item.find(params[:id])
+
+    render json: @item, status: 200
   end
 
-  # POST /items
+  
   def create
-    @item = Item.new(item_params)
+    @item = Item.create(item_params)
 
-    if @item.save
-      render json: @item, status: :created, location: @item
-    else
-      render json: @item.errors, status: :unprocessable_entity
-    end
+    render json: @item, include: [:order], status: 200
   end
 
-  # PATCH/PUT /items/1
-  def update
-    if @item.update(item_params)
-      render json: @item
-    else
-      render json: @item.errors, status: :unprocessable_entity
-    end
-  end
 
-  # DELETE /items/1
+
+  
   def destroy
+    @item = Item.find(params[:id])
     @item.destroy
+    render json: ("This Item was successfully deleted.").to_jason
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_item
-      @item = Item.find(params[:id])
-    end
 
-    # Only allow a trusted parameter "white list" through.
-    def item_params
-      params.fetch(:item, {})
-    end
+  def item_params
+    params.require(:item).permit(:item_name, :item_price, :order_id)
+   end
 end

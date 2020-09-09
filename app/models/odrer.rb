@@ -1,2 +1,0 @@
-class Odrer < ApplicationRecord
-end
