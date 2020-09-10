@@ -16,7 +16,7 @@ class Api::OrdersController < ApplicationController
   end    
 
   def create
-      @order = Order.create(book_params)
+      @order = Order.create(order_params)
 
       render json: @order, include: [:items], status: 200
   end
@@ -32,7 +32,7 @@ class Api::OrdersController < ApplicationController
       @order = Order.find(params[:id])
       @order.delete
 
-      render json: {bookId: @order.id}
+      render json: {orderId: @order.id}
 
   end
 
